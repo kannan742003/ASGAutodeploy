@@ -4,10 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Private IP Address</title>
+    <title>Private Ip address</title>
 </head>
 <body>
-    <h1>Private IP Address of EC2 Instance:</h1>
+    <h1>Private Ip address of Ec2 Instance:</h1>
     <p>
         <%
             try {
