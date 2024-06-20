@@ -3,7 +3,7 @@ name: Deploy to AWS CodeDeploy
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   deploy:
@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
+          distribution: 'adopt'
 
       - name: Build with Maven
         run: mvn clean package
