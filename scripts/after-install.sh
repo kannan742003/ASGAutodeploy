@@ -1,2 +1,3 @@
 #!/bin/bash
-echo "AfterInstall hook: Executing post-deployment tasks..."
+# Ensure the permissions are correct
+chown tomcat:tomcat /opt/tomcat/webapps/MyApp.war

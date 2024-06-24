@@ -1,2 +1,3 @@
 #!/bin/bash
-echo "BeforeInstall hook: Preparing for deployment..."
+# Remove old WAR files if any
+rm -f /opt/tomcat/webapps/MyApp.war

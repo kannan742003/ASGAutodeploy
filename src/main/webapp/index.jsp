@@ -4,10 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My  Private Ip Address</title>
+    <title>My Private Ip Address</title>
 </head>
 <body>
-    <h1>My Private Ip Address of Ec2 Instance:</h1>
+    <h1>My Private Ip Address of EC2 Instance:</h1>
     <p>
         <%
             try {
@@ -21,7 +21,7 @@
                     while (addresses.hasMoreElements()) {
                         InetAddress addr = addresses.nextElement();
                         if (addr.isSiteLocalAddress()) {
-                            out.print("Private IP Address: " + addr.getHostAddress());
+                            out.print("My Private IP Address: " + addr.getHostAddress());
                         }
                     }
                 }

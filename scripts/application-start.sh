@@ -1,3 +1,3 @@
 #!/bin/bash
-systemctl restart tomcat.service
-echo "ApplicationStart hook: Restarted Tomcat service."
+# Restart Tomcat to deploy the new WAR file
+systemctl restart tomcat
