@@ -21,7 +21,7 @@
                     while (addresses.hasMoreElements()) {
                         InetAddress addr = addresses.nextElement();
                         if (addr.isSiteLocalAddress()) {
-                            out.print("My Private IP Address: " + addr.getHostAddress());
+                            out.print("Private IP Address: " + addr.getHostAddress());
                         }
                     }
                 }
