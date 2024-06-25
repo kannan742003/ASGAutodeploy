@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /MyApp/target/MyApp-1.0-SNAPSHOT.war
+  - source: /home/ubuntu/MyApp/target/MyApp-1.0-SNAPSHOT.war
     destination: /opt/tomcat/webapps/
     overwrite: true
     name: MyApp.war
