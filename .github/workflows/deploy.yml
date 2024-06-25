@@ -1,4 +1,4 @@
-name: Deploy to AWS CodeDeploy
+name: Deploy to AWS S3
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Prepare deployment package
         run: |
           mkdir -p deploy/scripts
-          cp target/MyApp-1.0-SNAPSHOT.war deploy/
+          cp target/MyApp-1.0-SNAPSHOT.war deploy/MyApp.war
           cp scripts/before-install.sh deploy/scripts/
           cp scripts/after-install.sh deploy/scripts/
           cp scripts/application-start.sh deploy/scripts/
@@ -33,21 +33,24 @@ jobs:
           cd deploy
           zip -r MyApp.zip .
 
+      - name: Verify MyApp.zip existence
+        run: ls -l deploy/MyApp.zip
+
       - name: Upload to S3
         env:
           AWS_REGION: us-west-2
-          S3_BUCKET: asgautodeploy
+          S3_BUCKET: asgautodeploy  
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 cp MyApp.zip s3://$S3_BUCKET/MyApp.zip --region $AWS_REGION
+          aws s3 cp deploy/MyApp.zip s3://$S3_BUCKET/MyApp.zip --region $AWS_REGION
 
       - name: Deploy to AWS CodeDeploy
         env:
           AWS_REGION: us-west-2
           CODEDEPLOY_APP_NAME: javaapp
           CODEDEPLOY_DEPLOYMENT_GROUP: Asgdeploymentgrp
-          S3_BUCKET: asgautodeploy
+          S3_BUCKET: asgautodeploy  
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
