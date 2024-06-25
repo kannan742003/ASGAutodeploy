@@ -25,7 +25,7 @@ jobs:
       - name: Verify WAR file exists
         run: |
           if [ ! -f "target/MyApp-1.0-SNAPSHOT.war" ]; then
-            echo "WAR file not found!"
+            echo "WAR file not found in target directory!"
             exit 1
           fi
 
@@ -39,6 +39,10 @@ jobs:
           cp appspec.yml deploy/
           cd deploy
           zip -r MyApp.zip .
+          if [ ! -f "MyApp.zip" ]; then
+            echo "MyApp.zip not created!"
+            exit 1
+          fi
 
       - name: Upload to S3
         env:
@@ -47,6 +51,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
+          ls -l MyApp.zip
           aws s3 cp MyApp.zip s3://$S3_BUCKET/MyApp.zip --region $AWS_REGION
 
       - name: Deploy to AWS CodeDeploy
