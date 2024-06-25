@@ -22,24 +22,26 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Zip the application
-        run: zip -r MyApp.zip target/*.war scripts/ appspec.yml
-
-      - name: Upload to S3
-        env:
-          AWS_REGION: us-west-2
-          S3_BUCKET: asgautodeploy
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Prepare deployment package
         run: |
-          aws s3 cp MyApp.zip s3://$S3_BUCKET/MyApp.zip --region $AWS_REGION
+          mkdir -p deploy
+          cp target/*.war deploy/
+          cp -r scripts/ deploy/
+          cp appspec.yml deploy/
+          cd deploy
+          zip -r MyApp.zip .
+
+      - name: Upload to GitHub Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: MyApp
+          path: deploy/MyApp.zip
 
       - name: Deploy to AWS CodeDeploy
         env:
           AWS_REGION: us-west-2
           CODEDEPLOY_APP_NAME: javaapp
           CODEDEPLOY_DEPLOYMENT_GROUP: Asgdeploymentgrp
-          S3_BUCKET: asgautodeploy
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
@@ -48,4 +50,3 @@ jobs:
             --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP \
             --s3-location bucket=$S3_BUCKET,key=MyApp.zip,bundleType=zip \
             --region $AWS_REGION
-
