@@ -25,7 +25,7 @@ jobs:
       - name: Prepare deployment package
         run: |
           mkdir -p deploy/scripts
-          cp /home/ubuntu/MyApp/target/MyApp-1.0-SNAPSHOT.war deploy/
+          cp target/MyApp-1.0-SNAPSHOT.war deploy/
           cp scripts/before-install.sh deploy/scripts/
           cp scripts/after-install.sh deploy/scripts/
           cp scripts/application-start.sh deploy/scripts/
