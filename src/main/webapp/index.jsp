@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Private IP Address</title>
+    <title>My Private IP Address</title>
 </head>
 <body>
     <h1>My Private Ip Address of EC2 Instance:</h1>
