@@ -39,10 +39,10 @@ jobs:
           cp appspec.yml deploy/
           cd deploy
           zip -r MyApp.zip .
-          if [ ! -f "MyApp.zip" ]; then
-            echo "MyApp.zip not created!"
-            exit 1
-          fi
+          ls -lh MyApp.zip # List the zip file to confirm its creation
+
+      - name: Debug: List files in deploy directory
+        run: ls -l deploy
 
       - name: Upload to S3
         env:
@@ -51,8 +51,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          ls -l MyApp.zip
-          aws s3 cp MyApp.zip s3://$S3_BUCKET/MyApp.zip --region $AWS_REGION
+          ls -lh deploy/MyApp.zip # Ensure the zip file exists before upload
+          aws s3 cp deploy/MyApp.zip s3://$S3_BUCKET/deployments/MyApp.zip --region $AWS_REGION
 
       - name: Deploy to AWS CodeDeploy
         env:
@@ -66,5 +66,5 @@ jobs:
           aws deploy create-deployment \
             --application-name $CODEDEPLOY_APP_NAME \
             --deployment-group-name $CODEDEPLOY_DEPLOYMENT_GROUP \
-            --s3-location bucket=$S3_BUCKET,key=MyApp.zip,bundleType=zip \
+            --s3-location bucket=$S3_BUCKET,key=deployments/MyApp.zip,bundleType=zip \
             --region $AWS_REGION
