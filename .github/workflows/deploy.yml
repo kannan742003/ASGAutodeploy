@@ -22,21 +22,28 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
+      - name: Verify WAR file exists
+        run: |
+          if [ ! -f "target/MyApp-1.0-SNAPSHOT.war" ]; then
+            echo "WAR file not found!"
+            exit 1
+          fi
+
       - name: Prepare deployment package
         run: |
           mkdir -p deploy/scripts
-          cp /home/ubuntu/MyApp/target/MyApp-1.0-SNAPSHOT.war deploy/
+          cp target/MyApp-1.0-SNAPSHOT.war deploy/
           cp scripts/before-install.sh deploy/scripts/
           cp scripts/after-install.sh deploy/scripts/
           cp scripts/application-start.sh deploy/scripts/
           cp appspec.yml deploy/
           cd deploy
           zip -r MyApp.zip .
-          
+
       - name: Upload to S3
         env:
           AWS_REGION: us-west-2
-          S3_BUCKET: asgautodeploy
+          S3_BUCKET: asgautodeploy  
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
@@ -47,7 +54,7 @@ jobs:
           AWS_REGION: us-west-2
           CODEDEPLOY_APP_NAME: javaapp
           CODEDEPLOY_DEPLOYMENT_GROUP: Asgdeploymentgrp
-          S3_BUCKET: asgautodeploy
+          S3_BUCKET: asgautodeploy  
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
