@@ -1,3 +1,5 @@
 #!/bin/bash
-# Remove old WAR files if any
-rm -f /opt/tomcat/webapps/MyApp.war
+# Stop Tomcat
+sudo systemctl stop tomcat
+# Remove existing application
+rm -rf /opt/tomcat/webapps/MyApp.war

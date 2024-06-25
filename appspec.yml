@@ -1,19 +1,21 @@
 version: 0.0
 os: linux
 files:
-  - source: /home/ubuntu/MyApp/target/MyApp-1.0-SNAPSHOT.war
+  - source: MyApp-1.0-SNAPSHOT.war
     destination: /opt/tomcat/webapps/MyApp.war
     overwrite: true
-    name: MyApp.war
 
 hooks:
   BeforeInstall:
     - location: scripts/before-install.sh
       runas: root
+      timeout: 300  
   AfterInstall:
     - location: scripts/after-install.sh
       runas: root
+      timeout: 300 
   ApplicationStart:
     - location: scripts/application-start.sh
       runas: root
+      timeout: 300  
 
